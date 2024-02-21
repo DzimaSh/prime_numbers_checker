@@ -36,9 +36,9 @@ public class Parser {
             boolean startParsing = false;
             while (scanner.hasNext()) {
                 String next = scanner.next().trim();
-                if (next.startsWith(START_BRACKET)) {
+                if (next.contains(START_BRACKET)) {
                     startParsing = true;
-                    next = next.substring(1);
+                    next = next.substring(next.indexOf(START_BRACKET) + 1);
                 }
                 if (next.contains(END_BRACKET)) {
                     next = next.substring(0, next.indexOf(END_BRACKET));
@@ -56,5 +56,15 @@ public class Parser {
             throw e;
         }
         return numbers;
+    }
+
+    public static boolean isPrime(long num) {
+        if (num <= 1) return false;
+        if (num <= 3) return true;
+        if (num % 2 == 0 || num % 3 == 0) return false;
+        for (long i = 5; i * i <= num; i = i + 6)
+            if (num % i == 0 || num % (i + 2) == 0)
+                return false;
+        return true;
     }
 }
