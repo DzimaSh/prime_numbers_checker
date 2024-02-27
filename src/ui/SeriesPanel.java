@@ -3,7 +3,6 @@ package ui;
 import parser.Parser;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -21,15 +20,13 @@ import java.util.Objects;
 
 public abstract class SeriesPanel extends JPanel {
     protected JTextPane textPane1, textPane2, textPane3;
-    protected JButton fileButton, defaultFileButton, proceedButton;
-    protected File selectedFile = null;
-    private FileChooserPanel fileSelector;
+    protected JButton proceedButton;
+    private final FileChooserPanel fileSelector;
 
 
     public SeriesPanel(String defaultFileName) {
         super(new BorderLayout());
         prepareTextPanes();
-        prepareDefaultFileButton();
         prepareProceedButton();
 
         JPanel mCenterPanel = new JPanel(new GridLayout(1, 3));
@@ -56,17 +53,12 @@ public abstract class SeriesPanel extends JPanel {
         proceedButton = new JButton("Proceed");
         proceedButton.addActionListener(e -> {
             if (Objects.nonNull(getSelectedFile())) {
-                try {
-                    List<Long> numbers = Parser.readFileAndParseArray(getSelectedFile());
-                    printNumbers(numbers);
-                } catch (FileNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
+                proceed();
             }
         });
     }
 
-    protected abstract void prepareDefaultFileButton();
+    protected abstract void proceed();
 
     protected void printNumbers(List<Long> numbers) {
         textPane1.setText("");

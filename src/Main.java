@@ -1,4 +1,5 @@
 import ui.MSeriesPanel;
+import ui.WSeriesPanel;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,15 +29,14 @@ public class Main {
         tabbedPane.setPreferredSize(new Dimension(400, 600));
 
         JPanel mCenterPanel = new MSeriesPanel();
-
         tabbedPane.addTab("M series", null, mCenterPanel, "This is M series tab");
+
+        JPanel wCenterPanel = new WSeriesPanel();
+        tabbedPane.addTab("W series", null, wCenterPanel, "This is W series tab");
 
         frame.add(tabbedPane, BorderLayout.CENTER);
 
         frame.pack();
         frame.setVisible(true);
     }
-
-
-
 }

@@ -2,14 +2,9 @@ package ui;
 
 import parser.Parser;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 public class MSeriesPanel extends SeriesPanel {
 
@@ -19,18 +14,13 @@ public class MSeriesPanel extends SeriesPanel {
         super(DEFAULT_FILE);
     }
 
-
     @Override
-    protected void prepareDefaultFileButton() {
-        defaultFileButton = new JButton("Proceed default data");
-        defaultFileButton.addActionListener(e -> {
-            try {
-                File selectedFile = new File(DEFAULT_FILE);
-                List<Long> numbers = Parser.readFileAndParseArray(selectedFile);
-                printNumbers(numbers);
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+    protected void proceed() {
+        try {
+            List<Long> numbers = Parser.readFileAndParseArray(getSelectedFile());
+            printNumbers(numbers);
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
