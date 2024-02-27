@@ -17,16 +17,33 @@ import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class SeriesPanel extends JPanel {
     protected JTextPane textPane1, textPane2, textPane3;
-    protected JButton fileButton, defaultFileButton;
+    protected JButton fileButton, defaultFileButton, proceedButton;
+    protected File selectedFile = null;
+    private FileChooserPanel fileSelector;
 
 
-    public SeriesPanel() {
+    public SeriesPanel(String defaultFileName) {
         super(new BorderLayout());
-        prepareFileButton();
         prepareTextPanes();
+        prepareDefaultFileButton();
+        prepareProceedButton();
+
+        JPanel mCenterPanel = new JPanel(new GridLayout(1, 3));
+        mCenterPanel.add(new JScrollPane(textPane1));
+        mCenterPanel.add(new JScrollPane(textPane2));
+        mCenterPanel.add(new JScrollPane(textPane3));
+
+        JPanel mBottomPanel = new JPanel(new GridLayout(2, 1));
+        fileSelector = new FileChooserPanel(defaultFileName);
+        mBottomPanel.add(fileSelector);
+        mBottomPanel.add(proceedButton);
+
+        this.add(mCenterPanel, BorderLayout.CENTER);
+        this.add(mBottomPanel, BorderLayout.SOUTH);
     }
 
     private void prepareTextPanes() {
@@ -35,19 +52,16 @@ public abstract class SeriesPanel extends JPanel {
         textPane3 = new JTextPane();
     }
 
-    private void prepareFileButton() {
-        fileButton = new JButton("Выбрать файл");
-        fileButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int returnValue = fileChooser.showOpenDialog(null);
-            try {
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    List<Long> numbers = Parser.readFileAndParseArray(selectedFile);
+    private void prepareProceedButton() {
+        proceedButton = new JButton("Proceed");
+        proceedButton.addActionListener(e -> {
+            if (Objects.nonNull(getSelectedFile())) {
+                try {
+                    List<Long> numbers = Parser.readFileAndParseArray(getSelectedFile());
                     printNumbers(numbers);
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
             }
         });
     }
@@ -80,5 +94,9 @@ public abstract class SeriesPanel extends JPanel {
         textPane.setCaretPosition(len);
         textPane.setCharacterAttributes(printAttrSet, false);
         textPane.replaceSelection(text);
+    }
+
+    protected File getSelectedFile() {
+        return fileSelector.getSelectedFile();
     }
 }
