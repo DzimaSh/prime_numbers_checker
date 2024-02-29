@@ -1,4 +1,5 @@
 package parser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -58,6 +59,14 @@ public class Parser {
         return numbers;
     }
 
+    /**
+     * Checks if a given number is prime or not.
+     * A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.
+     * This method uses a simple and efficient algorithm based on trial division by 6k ± 1.
+     *
+     * @param num the number to be checked
+     * @return true if the number is prime, false otherwise
+     */
     public static boolean isPrime(long num) {
         if (num <= 1) return false;
         if (num <= 3) return true;

@@ -4,7 +4,6 @@ import parser.Parser;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Objects;
 
 public class MSeriesPanel extends SeriesPanel {
 
